@@ -2,6 +2,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.Types.ObjectId;
 
 // initiate connection to database
 const connect = () => {
@@ -30,7 +31,39 @@ const bookSchema = new Schema({
   comments: [String],
 });
 
+// models
+const Book = mongoose.model("Book", bookSchema);
 
+// add functionality to models
+Book.addOne = (title, done) => {
+  console.log("Adding new book: " + title);
+  // reject missing title
+  if (!title) return done("missing required field title");
+  // create and save new book
+  const book = new Book({ title: title, comments: [] });
+  book.save((err, data) => {
+    // handle errors
+    if (err) return console.log(err);
+    if (!data) return console.log("save function returned no book document!");
+    // return saved book document
+    done(null, data);
+  });
+};
+
+Book.addComment = (_id, comment, done) => {
+  console.log("Adding comment to book: " + _id);
+  console.log(`- Comment: "${comment}"`);
+  // reject missing comment
+  if (!comment) return done("missing required field comment");
+  // reject invalid _id
+  if (!ObjectId.isValid(_id)) return done("no book exists");
+  // find and update book
+  Book.findByIdAndUpdate(_id, { $push: { comments: comment } }, (err, data) => {
+    if (err) return console.log(err);
+    console.log("Success: " + JSON.stringify(data));
+    done(null, data);
+  });
+};
 
 // exports
 module.exports = { connect, models: { Book } };
