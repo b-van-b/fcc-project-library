@@ -10,6 +10,7 @@ const chaiHttp = require("chai-http");
 const chai = require("chai");
 const assert = chai.assert;
 const server = require("../server");
+const { faker } = require("@faker-js/faker");
 
 chai.use(chaiHttp);
 
@@ -52,11 +53,27 @@ suite("Functional Tests", function () {
       "POST /api/books with title => create book object/expect book object",
       function () {
         test("Test POST /api/books with title", function (done) {
+          const data = { title: faker.random.words() };
           chai
             .request(server)
             .post("/api/books")
-            .send({})
+            .send(data)
             .end(function (err, res) {
+              assert.property(
+                res.body,
+                "_id",
+                "Book object should contain _id"
+              );
+              assert.property(
+                res.body,
+                "title",
+                "Book object should contain name"
+              );
+              assert.equal(
+                res.body.title,
+                data.title,
+                "Book object name should equal input name"
+              );
               done();
             });
         });
