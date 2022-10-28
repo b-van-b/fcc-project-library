@@ -39,8 +39,13 @@ module.exports = function (app, models) {
     .route("/api/books/:id")
     .get(function (req, res) {
       let bookid = req.params.id;
-      const comment = req.body.comment;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+    })
+
+    .post(function (req, res) {
+      let bookid = req.params.id;
+      let comment = req.body.comment;
+      //json res format same as .get
       Book.addComment(bookid, comment, (err, data) => {
         if (err) {
           console.log(err);
@@ -48,12 +53,6 @@ module.exports = function (app, models) {
         }
         return res.json(data);
       });
-    })
-
-    .post(function (req, res) {
-      let bookid = req.params.id;
-      let comment = req.body.comment;
-      //json res format same as .get
     })
 
     .delete(function (req, res) {
