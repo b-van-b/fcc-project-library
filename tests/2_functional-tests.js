@@ -87,8 +87,14 @@ suite("Functional Tests", function () {
           chai
             .request(server)
             .post("/api/books")
-            .send({})
+            .send({ title: "" })
             .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(
+                res.body,
+                "missing required field title",
+                "should report error if no title given"
+              );
               done();
             });
         });
