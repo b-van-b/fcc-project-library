@@ -133,8 +133,14 @@ suite("Functional Tests", function () {
       test("Test GET /api/books/[id] with id not in db", function (done) {
         chai
           .request(server)
-          .get("/api/books/")
+          .get("/api/books/invalid-id")
           .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(
+              res.body,
+              "no book exists",
+              "should report no book exists"
+            );
             done();
           });
       });
