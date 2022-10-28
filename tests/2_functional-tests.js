@@ -12,6 +12,8 @@ const assert = chai.assert;
 const server = require("../server");
 const { faker } = require("@faker-js/faker");
 
+let deleteBookId;
+
 chai.use(chaiHttp);
 
 suite("Functional Tests", function () {
@@ -59,6 +61,7 @@ suite("Functional Tests", function () {
             .post("/api/books")
             .send(data)
             .end(function (err, res) {
+              assert.equal(res.status, 200);
               assert.property(
                 res.body,
                 "_id",
@@ -74,6 +77,8 @@ suite("Functional Tests", function () {
                 data.title,
                 "Book object name should equal input name"
               );
+              // get book ID to delete later
+              deleteBookId = res.body._id;
               done();
             });
         });
@@ -160,8 +165,10 @@ suite("Functional Tests", function () {
       test("Test DELETE /api/books/[id] with valid id in db", function (done) {
         chai
           .request(server)
-          .delete("/api/books")
+          .delete("/api/books/" + deleteBookId)
           .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body, "delete successful");
             done();
           });
       });
@@ -169,8 +176,10 @@ suite("Functional Tests", function () {
       test("Test DELETE /api/books/[id] with  id not in db", function (done) {
         chai
           .request(server)
-          .delete("/api/books")
+          .delete("/api/books/thisisnotavalidid")
           .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.body, "no book exists");
             done();
           });
       });
