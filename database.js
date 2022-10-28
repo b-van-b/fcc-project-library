@@ -64,6 +64,9 @@ Book.addComment = (_id, comment, done) => {
     { new: true },
     (err, data) => {
       if (err) return console.log(err);
+      // null data indicates the book was not found
+      if (!data) return done("no book exists");
+      // otherwise, return the new book
       console.log("Success: " + JSON.stringify(data));
       done(null, data);
     }
