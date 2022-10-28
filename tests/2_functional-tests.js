@@ -182,11 +182,20 @@ suite("Functional Tests", function () {
         });
 
         test("Test POST /api/books/[id] without comment field", function (done) {
+          const data = {
+            comment: "",
+          };
           chai
             .request(server)
-            .post("/api/books")
-            .send({})
+            .post("/api/books/" + deleteBookId)
+            .send(data)
             .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(
+                res.body,
+                "missing required field comment",
+                "should report comment field is missing"
+              );
               done();
             });
         });
