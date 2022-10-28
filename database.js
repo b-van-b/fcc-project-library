@@ -73,5 +73,22 @@ Book.addComment = (_id, comment, done) => {
   );
 };
 
+Book.getOne = (_id, done) => {
+  // reject missing or invalid _id
+  if (!_id) return done("missing required field id");
+  if (!ObjectId.isValid(_id)) return done("no book exists");
+  // find book
+  console.log("Retrieving single book: " + _id);
+  Book.findById(_id)
+    .select({ __v: 0 })
+    .exec((err, data) => {
+      // handle errors
+      if (err) return console.log(err);
+      if (!data) return done("no book exists");
+      // return book
+      return done(null, data);
+    });
+};
+
 // exports
 module.exports = { connect, models: { Book } };

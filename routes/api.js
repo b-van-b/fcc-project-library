@@ -40,6 +40,13 @@ module.exports = function (app, models) {
     .get(function (req, res) {
       let bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      Book.getOne(bookid, (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.json(err);
+        }
+        return res.json(data);
+      });
     })
 
     .post(function (req, res) {
