@@ -90,5 +90,18 @@ Book.getOne = (_id, done) => {
     });
 };
 
+Book.getCollectionSummary = (done) => {
+  Book.aggregate()
+    .project({
+      _id: 1,
+      title: 1,
+      commentcount: { $size: "$comments" },
+    })
+    .exec((err, data) => {
+      if (err) return console.log(err);
+      return done(null, data);
+    });
+};
+
 // exports
 module.exports = { connect, models: { Book } };
