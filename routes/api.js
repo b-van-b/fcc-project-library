@@ -10,7 +10,7 @@
 
 module.exports = function (app, models) {
   // get Book model from database
-  const Book = models.book;
+  const Book = models.Book;
 
   app
     .route("/api/books")
