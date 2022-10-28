@@ -201,11 +201,20 @@ suite("Functional Tests", function () {
         });
 
         test("Test POST /api/books/[id] with comment, id not in db", function (done) {
+          const data = {
+            comment: faker.random.words(5),
+          };
           chai
             .request(server)
-            .post("/api/books")
-            .send({})
+            .post("/api/books/fake-id")
+            .send(data)
             .end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(
+                res.body,
+                "no book exists",
+                "should report no book exists"
+              );
               done();
             });
         });
