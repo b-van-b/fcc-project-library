@@ -162,11 +162,21 @@ suite("Functional Tests", function () {
       "POST /api/books/[id] => add comment/expect book object with id",
       function () {
         test("Test POST /api/books/[id] with comment", function (done) {
+          const data = {
+            comment: faker.random.words(5),
+          };
           chai
             .request(server)
-            .post("/api/books")
-            .send({})
+            .post("/api/books/" + deleteBookId)
+            .send(data)
             .end(function (err, res) {
+              assert.equal(res.status, 200);
+              const lastComment = res.body.comments.length - 1;
+              assert.equal(
+                res.body.comments[lastComment],
+                data.comment,
+                "last comment added should be the submitted one"
+              );
               done();
             });
         });
