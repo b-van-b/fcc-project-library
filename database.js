@@ -58,11 +58,16 @@ Book.addComment = (_id, comment, done) => {
   // reject invalid _id
   if (!ObjectId.isValid(_id)) return done("no book exists");
   // find and update book
-  Book.findByIdAndUpdate(_id, { $push: { comments: comment } }, (err, data) => {
-    if (err) return console.log(err);
-    console.log("Success: " + JSON.stringify(data));
-    done(null, data);
-  });
+  Book.findByIdAndUpdate(
+    _id,
+    { $push: { comments: comment } },
+    { new: true },
+    (err, data) => {
+      if (err) return console.log(err);
+      console.log("Success: " + JSON.stringify(data));
+      done(null, data);
+    }
+  );
 };
 
 // exports
