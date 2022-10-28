@@ -29,7 +29,7 @@ app.route("/").get(function (req, res) {
 fccTestingRoutes(app);
 
 //Routing for API
-apiRoutes(app);
+apiRoutes(app, myDB.models);
 
 //404 Not Found Middleware
 app.use(function (req, res, next) {

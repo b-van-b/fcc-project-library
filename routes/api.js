@@ -8,7 +8,10 @@
 
 "use strict";
 
-module.exports = function (app) {
+module.exports = function (app, models) {
+  // get Book model from database
+  const Book = models.book;
+
   app
     .route("/api/books")
     .get(function (req, res) {
@@ -19,6 +22,13 @@ module.exports = function (app) {
     .post(function (req, res) {
       let title = req.body.title;
       //response will contain new book object including atleast _id and title
+      Book.addOne(title, (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.json(err);
+        }
+        return res.json(data);
+      });
     })
 
     .delete(function (req, res) {
@@ -29,7 +39,15 @@ module.exports = function (app) {
     .route("/api/books/:id")
     .get(function (req, res) {
       let bookid = req.params.id;
+      const comment = req.body.comment;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+      Book.addComment(bookid, comment, (err, data) => {
+        if (err) {
+          console.log(err);
+          return res.json(err);
+        }
+        return res.json(data);
+      });
     })
 
     .post(function (req, res) {
