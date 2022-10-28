@@ -174,7 +174,11 @@ suite("Functional Tests", function () {
           .delete("/api/books/" + deleteBookId)
           .end(function (err, res) {
             assert.equal(res.status, 200);
-            assert.equal(res.body, "delete successful");
+            assert.equal(
+              res.body,
+              "delete successful",
+              "should report successful deletion"
+            );
             done();
           });
       });
@@ -185,7 +189,11 @@ suite("Functional Tests", function () {
           .delete("/api/books/thisisnotavalidid")
           .end(function (err, res) {
             assert.equal(res.status, 200);
-            assert.equal(res.body, "no book exists");
+            assert.equal(
+              res.body,
+              "no book exists",
+              "should report error if no valid id"
+            );
             done();
           });
       });
