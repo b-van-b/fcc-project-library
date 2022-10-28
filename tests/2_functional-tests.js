@@ -133,7 +133,7 @@ suite("Functional Tests", function () {
       test("Test GET /api/books/[id] with id not in db", function (done) {
         chai
           .request(server)
-          .get("/api/books")
+          .get("/api/books/")
           .end(function (err, res) {
             done();
           });
@@ -142,8 +142,11 @@ suite("Functional Tests", function () {
       test("Test GET /api/books/[id] with valid id in db", function (done) {
         chai
           .request(server)
-          .get("/api/books")
+          .get("/api/books/" + deleteBookId)
           .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.property(res.body, "_id", "Book should contain _id");
+            assert.property(res.body, "title", "Book should contain title");
             done();
           });
       });
