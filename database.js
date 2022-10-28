@@ -22,13 +22,15 @@ const connect = () => {
 };
 
 // schemas
-const Book = new Schema({
+const bookSchema = new Schema({
   title: {
     type: String,
     required: true,
   },
   comments: [String],
 });
+
+
 
 // exports
 module.exports = { connect, models: { Book } };
