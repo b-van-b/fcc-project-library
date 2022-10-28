@@ -38,6 +38,7 @@ module.exports = function (app, models) {
 
     .delete(function (req, res) {
       //if successful response will be 'complete delete successful'
+      Book.delAll(callback(res));
     });
 
   app
@@ -58,5 +59,6 @@ module.exports = function (app, models) {
     .delete(function (req, res) {
       let bookid = req.params.id;
       //if successful response will be 'delete successful'
+      Book.delOne(bookid, callback(res));
     });
 };

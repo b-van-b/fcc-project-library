@@ -103,5 +103,30 @@ Book.getCollectionSummary = (done) => {
     });
 };
 
+Book.delOne = (_id, done) => {
+  // handle invalid or missing ID
+  if (!_id) return done("missing required field id");
+  if (!ObjectId.isValid(_id)) return done("no book exists");
+  console.log("Deleting id: " + _id);
+  Book.findByIdAndDelete(_id, (err, data) => {
+    // handle errors
+    if (err) return console.log(err);
+    if (!data) return done("no book exists");
+    // else, report success
+    return done(null, "delete successful");
+  });
+};
+
+Book.delAll = (done) => {
+  console.log("Deleting all books...");
+  Book.deleteMany({}, (err, data) => {
+    // handle errors
+    if (err) return console.log(err);
+    if (!data) return done("no book exists");
+    // else, report success
+    return done(null, "complete delete successful");
+  });
+};
+
 // exports
 module.exports = { connect, models: { Book } };
